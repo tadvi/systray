@@ -36,3 +36,10 @@ Best way to learn how to use the library is to look at the included **example** 
 ![Hello World](example/screenshot.png)
 
 Use **release.bat** to build it.
+
+## Credits
+
+This library is built based on
+
+[xilp/systray](https://github.com/xilp/systray)
+
