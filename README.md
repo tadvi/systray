@@ -37,6 +37,12 @@ Best way to learn how to use the library is to look at the included **example** 
 
 Use **release.bat** to build it.
 
+## Caveats
+
+Package is designed to run as standalone GUI application. That means it runs its own Windows message loop.
+This can have unexpected side effects if you try to combine with other UI packages that also run they
+own message loops.
+
 ## Credits
 
 This library is built based on
