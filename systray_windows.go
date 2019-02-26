@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Tad Vizbaras. All Rights Reserved.
+ * Copyright (C) 2019 The Systray Authors. All Rights Reserved.
  */
 
 package systray
@@ -35,6 +35,16 @@ const (
 
 	NIS_HIDDEN = 0x00000001
 
+	NIIF_NONE               = 0x00000000
+	NIIF_INFO               = 0x00000001
+	NIIF_WARNING            = 0x00000002
+	NIIF_ERROR              = 0x00000003
+	NIIF_USER               = 0x00000004
+	NIIF_NOSOUND            = 0x00000010
+	NIIF_LARGE_ICON         = 0x00000020
+	NIIF_RESPECT_QUIET_TIME = 0x00000080
+	NIIF_ICON_MASK          = 0x0000000F
+
 	IMAGE_BITMAP    = 0
 	IMAGE_ICON      = 1
 	LR_LOADFROMFILE = 0x00000010
@@ -49,7 +59,7 @@ const (
 	WS_EX_CONTROLPARENT = 0X00010000
 
 	HWND_MESSAGE       = ^HWND(2)
-	NOTIFYICON_VERSION = 3
+	NOTIFYICON_VERSION = 4
 
 	IDI_APPLICATION = 32512
 	WM_APP          = 32768
@@ -120,6 +130,7 @@ type NOTIFYICONDATA struct {
 	SzInfoTitle      [64]uint16
 	DwInfoFlags      uint32
 	GuidItem         GUID
+	HBalloonIcon     HICON
 }
 
 type GUID struct {
@@ -368,11 +379,15 @@ func (p *Systray) SetTooltip(tooltip string) error {
 	return nil
 }
 
-func (p *Systray) ShowMessage(title, msg string) error {
+func (p *Systray) ShowMessage(title, msg string, bigIcon bool) error {
 	nid := NOTIFYICONDATA{
 		UID:  p.id,
 		HWnd: HWND(p.hwnd),
 	}
+	if bigIcon == true {
+		nid.DwInfoFlags = NIIF_USER
+	}
+
 	nid.CbSize = uint32(unsafe.Sizeof(nid))
 
 	nid.UFlags = NIF_INFO
